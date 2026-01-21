@@ -11,8 +11,11 @@ export interface Course {
 
 interface CourseContextType {
   courses: Course[];
+  enrolledCourses: Course[];
   addCourse: (course: Omit<Course, 'id' | 'createdAt'>) => void;
   deleteCourse: (id: string) => void;
+  enrollCourse: (id: string) => void;
+  unenrollCourse: (id: string) => void;
 }
 
 const CourseContext = createContext<CourseContextType | undefined>(undefined);
@@ -47,6 +50,7 @@ const initialCourses: Course[] = [
 
 export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [courses, setCourses] = useState<Course[]>(initialCourses);
+  const [enrolledCourses, setEnrolledCourses] = useState<Course[]>([]);
 
   const addCourse = (courseData: Omit<Course, 'id' | 'createdAt'>) => {
     const newCourse: Course = {
@@ -59,10 +63,22 @@ export const CourseProvider: React.FC<{ children: ReactNode }> = ({ children }) 
 
   const deleteCourse = (id: string) => {
     setCourses((prev) => prev.filter((course) => course.id !== id));
+    setEnrolledCourses((prev) => prev.filter((course) => course.id !== id));
+  };
+
+  const enrollCourse = (id: string) => {
+    const course = courses.find((c) => c.id === id);
+    if (course && !enrolledCourses.find((c) => c.id === id)) {
+      setEnrolledCourses((prev) => [...prev, course]);
+    }
+  };
+
+  const unenrollCourse = (id: string) => {
+    setEnrolledCourses((prev) => prev.filter((course) => course.id !== id));
   };
 
   return (
-    <CourseContext.Provider value={{ courses, addCourse, deleteCourse }}>
+    <CourseContext.Provider value={{ courses, enrolledCourses, addCourse, deleteCourse, enrollCourse, unenrollCourse }}>
       {children}
     </CourseContext.Provider>
   );

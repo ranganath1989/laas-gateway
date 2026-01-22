@@ -51,8 +51,8 @@ const Login: React.FC = () => {
               <GraduationCap className="w-10 h-10" />
             </div>
             <div>
-              <h1 className="text-4xl font-display font-bold">LAAS</h1>
-              <p className="text-primary-foreground/70">Training Institute</p>
+              <h1 className="text-4xl font-display font-bold">LAAS Technologies</h1>
+              <p className="text-primary-foreground/70">Learning As A Service - where learning meets opportunity</p>
             </div>
           </div>
           
